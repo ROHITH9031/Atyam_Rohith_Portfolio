@@ -17,6 +17,9 @@ document.querySelectorAll('.nav-links a').forEach(a => {
 document.addEventListener('DOMContentLoaded', () => {
   const profileImg = document.querySelector('.profile-ring .profile-img');
   const profileRing = document.querySelector('.profile-ring');
+  const profileModal = document.getElementById('profileModal');
+  const profileModalImg = document.getElementById('profileModalImg');
+  const profileModalCloseButtons = document.querySelectorAll('[data-profile-close]');
 
   if (!profileImg || !profileRing) return;
 
@@ -29,6 +32,49 @@ document.addEventListener('DOMContentLoaded', () => {
       break;
     }
   }
+
+    if (profileModalImg) {
+      profileModalImg.src = profileImg.src;
+    }
+
+    const openProfileModal = () => {
+      if (!profileModal || !profileModalImg) return;
+      profileModalImg.src = profileImg.src;
+      profileModal.classList.add('open');
+      profileModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('profile-modal-open');
+    };
+
+    const closeProfileModal = () => {
+      if (!profileModal) return;
+      profileModal.classList.remove('open');
+      profileModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('profile-modal-open');
+    };
+
+    profileImg.addEventListener('click', openProfileModal);
+    profileImg.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openProfileModal();
+      }
+    });
+
+    profileModalCloseButtons.forEach((button) => {
+      button.addEventListener('click', closeProfileModal);
+    });
+
+    profileModal?.addEventListener('click', (event) => {
+      if (event.target === profileModal) {
+        closeProfileModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeProfileModal();
+      }
+    });
 });
 
 // Scroll reveal
